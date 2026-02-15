@@ -1,0 +1,42 @@
+const menuToggle=document.querySelector('.menu-toggle');
+const navLinks=document.querySelector('.nav-links');
+
+if(menuToggle){
+menuToggle.addEventListener('click',()=>{
+navLinks.classList.toggle('active');
+});
+}
+
+function animateNumbers(){
+const stats=document.querySelectorAll('.stat-number');
+stats.forEach(stat=>{
+const target=stat.innerText;
+const number=parseInt(target.replace(/\D/g,''));
+const suffix=target.replace(/[\d\s+]/g,'');
+let current=0;
+const increment=number/50;
+const timer=setInterval(()=>{
+current+=increment;
+if(current>=number){
+stat.innerText=target;
+clearInterval(timer);
+}else{
+stat.innerText=Math.floor(current)+suffix;
+}
+},30);
+});
+}
+
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+animateNumbers();
+observer.unobserve(entry.target);
+}
+});
+},{threshold:0.5});
+
+const statsSection=document.querySelector('.stats-section');
+if(statsSection){
+observer.observe(statsSection);
+}
